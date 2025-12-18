@@ -1,0 +1,1593 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+html, body {
+    height: 100%;
+    background: #121216;
+    color: #ffffff;
+}
+
+/* ===== APP ===== */
+.app {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding-top: 12px;
+    padding-bottom: 28px;
+}
+
+/* ===== CONTENT ===== */
+.app-content {
+    flex: 1;
+    padding: 24px;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.app-content h2 {
+    font-size: 22px;
+    margin-bottom: 8px;
+}
+
+.app-content p {
+    font-size: 15px;
+    color: rgba(255,255,255,0.75);
+}
+
+/* ===== BOTTOM NAV ===== */
+.bottom-nav {
+    margin: 0 16px;
+    padding: 14px 16px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    background: #1b1b21;
+    border-radius: 22px;
+}
+
+/* ===== NAV ITEM ===== */
+.nav-item {
+    flex: 1;
+    background: none;
+    border: none;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+
+    color: rgba(255,255,255,0.55);
+    cursor: pointer;
+
+    transition: color 0.25s ease, transform 0.25s ease;
+}
+
+/* ===== ICONS (mask) ===== */
+.icon {
+    width: 22px;
+    height: 22px;
+    background: rgba(255,255,255,0.55);
+
+    -webkit-mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+
+    mask-size: contain;
+    mask-repeat: no-repeat;
+    mask-position: center;
+
+    transition: background 0.25s ease, transform 0.25s ease;
+}
+
+.icon-body    { mask-image: url("icons/body.svg");    -webkit-mask-image: url("icons/body.svg"); }
+.icon-mind    { mask-image: url("icons/mind.svg");    -webkit-mask-image: url("icons/mind.svg"); }
+.icon-growth  { mask-image: url("icons/growth.svg");  -webkit-mask-image: url("icons/growth.svg"); }
+.icon-profile { mask-image: url("icons/profile.svg"); -webkit-mask-image: url("icons/profile.svg"); }
+
+/* ===== ACTIVE TAB ===== */
+.nav-item.active {
+    color: #ffffff;
+    transform: translateY(-4px);
+}
+
+.nav-item.active .icon {
+    background: linear-gradient(90deg, #ff9a5a, #ff5c8a);
+    transform: scale(1.15);
+}
+
+.nav-item::after {
+    content: "";
+    margin-top: 4px;
+    width: 22px;
+    height: 3px;
+    border-radius: 2px;
+    background: linear-gradient(90deg, #ff9a5a, #ff5c8a);
+    opacity: 0;
+    transform: scaleX(0.6);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.nav-item.active::after {
+    opacity: 1;
+    transform: scaleX(1);
+}
+
+/* ===== PROFILE ===== */
+.profile {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Карточка */
+.profile-card {
+    background: #1b1b21;
+    border-radius: 24px;
+    padding: 20px;
+}
+
+/* Верх */
+.profile-top {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.profile-avatar {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: rgba(255,255,255,0.15);
+}
+
+.profile-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.avatar-placeholder {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #ff9a5a, #ff5c8a);
+}
+
+.profile-name {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.profile-level {
+    font-size: 14px;
+    color: rgba(255,255,255,0.7);
+}
+
+/* ===== CIRCULAR PROGRESS ===== */
+.profile-progress {
+    margin-top: 16px;
+    position: relative;
+    width: 120px;
+    height: 120px;
+    align-self: center;
+}
+
+.profile-progress svg {
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+}
+
+.profile-progress circle {
+    fill: none;
+    stroke-width: 8;
+}
+
+.profile-progress .bg {
+    stroke: rgba(255,255,255,0.15);
+}
+
+.profile-progress .fg {
+    stroke: url(#gradient);
+    stroke-linecap: round;
+}
+
+/* Текст внутри круга */
+.progress-text {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.progress-text span {
+    font-size: 12px;
+    color: rgba(255,255,255,0.7);
+}
+
+/* ===== STATS ===== */
+.profile-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+}
+
+.stat {
+    background: #1b1b21;
+    border-radius: 18px;
+    padding: 14px 8px;
+    text-align: center;
+}
+
+.stat-value {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.stat-label {
+    margin-top: 4px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.65);
+}
+/* ===== PROFILE INFO ===== */
+.profile-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+/* Имя */
+.profile-name {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+/* Звание */
+.profile-rank {
+    font-size: 14px;
+    font-weight: 500;
+    color: #ff9a5a;
+}
+
+/* XP до уровня */
+.profile-xp {
+    font-size: 13px;
+    color: rgba(255,255,255,0.7);
+}
+/* ===== XP BAR ===== */
+.xp-bar {
+    margin-top: 16px;
+    width: 100%;
+    height: 10px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.xp-bar-fill {
+    height: 100%;
+    border-radius: 999px;
+    background: linear-gradient(
+            90deg,
+            #ff9a5a,
+            #ff5c8a
+    );
+    transition: width 0.4s ease;
+}
+
+/* Подписи XP */
+.xp-bar-labels {
+    margin-top: 6px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: rgba(255,255,255,0.6);
+}
+
+/* ===== BIG WIDE CARD ===== */
+.wide-card {
+    background: #1b1b21;
+    border-radius: 22px;
+    padding: 18px;
+}
+
+.wide-title {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
+.wide-text {
+    font-size: 14px;
+    color: rgba(255,255,255,0.75);
+}
+
+/* ===== DOUBLE CARDS ===== */
+.double-cards {
+    display: flex;
+    gap: 12px;
+}
+
+.small-card {
+    flex: 1;
+    background: #1b1b21;
+    border-radius: 20px;
+    padding: 16px;
+}
+
+.small-title {
+    font-size: 14px;
+    color: rgba(255,255,255,0.7);
+}
+
+.small-value {
+    margin-top: 6px;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+/* ===== TRIPLE CARDS ===== */
+.triple-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.triple-card {
+    background: #1b1b21;
+    border-radius: 18px;
+    padding: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.triple-title {
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.triple-text {
+    font-size: 14px;
+    color: rgba(255,255,255,0.7);
+}
+/* ===== ACTION BUTTONS (Pomodoro / Test) ===== */
+.action-btn {
+    margin-top: 10px;
+    width: 100%;
+    padding: 14px;
+
+    border: none;
+    border-radius: 14px;
+
+    background: linear-gradient(90deg, #ff9a5a, #ff5c8a);
+    color: #ffffff;
+
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+
+    transition: transform 0.12s ease, opacity 0.12s ease;
+}
+
+.action-btn:active {
+    transform: scale(0.97);
+    opacity: 0.9;
+}
+
+/* ===== Pomodoro Time ===== */
+#pomodoroTime {
+    display: block;
+    margin-top: 8px;
+    font-size: 28px;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+/* ===== Mini Test Buttons ===== */
+.test-btn {
+    background: #1b1b21;
+    border: 1px solid rgba(255,255,255,0.15);
+    margin-top: 8px;
+}
+
+.test-btn:active {
+    background: #23232a;
+}
+/* ===== POMODORO ===== */
+.pomodoro {
+    text-align: center;
+}
+
+.pomodoro-time {
+    margin: 14px 0;
+    font-size: 42px;
+    font-weight: 700;
+    letter-spacing: 2px;
+}
+
+.pomodoro-controls {
+    display: flex;
+    gap: 10px;
+}
+
+.pomo-btn {
+    flex: 1;
+    padding: 14px;
+    border-radius: 14px;
+    border: none;
+    cursor: pointer;
+
+    font-size: 15px;
+    font-weight: 500;
+
+    background: linear-gradient(90deg, #ff9a5a, #ff5c8a);
+    color: #fff;
+
+    transition: transform 0.12s ease, opacity 0.12s ease;
+}
+
+.pomo-btn.secondary {
+    background: #1b1b21;
+    border: 1px solid rgba(255,255,255,0.15);
+}
+
+.pomo-btn:active {
+    transform: scale(0.97);
+    opacity: 0.9;
+}
+
+.pomodoro-hint {
+    margin-top: 10px;
+    font-size: 13px;
+    color: rgba(255,255,255,0.6);
+}
+/* ===== Pomodoro ===== */
+.pomodoro {
+    text-align: center;
+}
+
+.pomodoro-time {
+    margin: 16px 0;
+    font-size: 44px;
+    font-weight: 700;
+    letter-spacing: 2px;
+}
+
+.pomodoro-controls {
+    display: flex;
+    gap: 10px;
+}
+
+.pomo-btn {
+    flex: 1;
+    padding: 14px;
+    border-radius: 14px;
+    border: none;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 500;
+
+    background: linear-gradient(90deg, #ff9a5a, #ff5c8a);
+    color: #fff;
+}
+
+.pomo-btn.secondary {
+    background: #1b1b21;
+    border: 1px solid rgba(255,255,255,0.15);
+}
+
+.pomodoro-hint {
+    margin-top: 10px;
+    font-size: 13px;
+    color: rgba(255,255,255,0.6);
+}
+
+/* ===== Presets ===== */
+.pomodoro-presets {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin-top: 6px;
+}
+
+.preset-btn {
+    padding: 8px 12px;
+    border-radius: 999px;
+    border: 1px solid rgba(255,255,255,0.2);
+    background: transparent;
+    color: rgba(255,255,255,0.7);
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.preset-btn.active {
+    background: linear-gradient(90deg, #ff9a5a, #ff5c8a);
+    color: #fff;
+    border: none;
+}
+/* ===== GROWTH LAYOUT ===== */
+.growth {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.growth-header {
+    text-align: center;
+}
+
+.growth-header p {
+    font-size: 15px;
+    color: rgba(255,255,255,0.7);
+}
+
+/* ===== TEST ===== */
+.test-options {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.test-result {
+    margin-top: 10px;
+    font-size: 14px;
+    color: rgba(255,255,255,0.8);
+}
+
+/* ===== SOFT SKILLS ===== */
+.soft-skill-text {
+    font-size: 15px;
+    margin-bottom: 10px;
+}
+/* ===== GROWTH ===== */
+.growth {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+}
+
+.growth-header {
+    text-align: center;
+}
+
+.growth-header p {
+    font-size: 15px;
+    color: rgba(255,255,255,0.7);
+}
+
+/* ===== TEST ===== */
+.test-options {
+    display: flex;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.test-result {
+    margin-top: 10px;
+    font-size: 14px;
+    color: rgba(255,255,255,0.8);
+}
+
+/* ===== SOFT SKILLS ===== */
+.soft-skill-text {
+    font-size: 15px;
+    margin-bottom: 10px;
+}
+/* =========================
+   SELF-DISCOVERY (TEST)
+========================= */
+
+.test-options {
+    display: flex;
+    gap: 12px;
+    margin-top: 14px;
+}
+
+.test-btn {
+    flex: 1;
+    padding: 14px;
+    border-radius: 14px;
+
+    border: 1px solid rgba(255,255,255,0.15);
+    background: #1b1b21;
+
+    color: rgba(255,255,255,0.85);
+    font-size: 14px;
+    font-weight: 500;
+
+    cursor: pointer;
+    transition: background 0.15s ease,
+    transform 0.12s ease,
+    border-color 0.15s ease;
+}
+
+.test-btn:active {
+    transform: scale(0.97);
+}
+
+.test-btn.selected {
+    background: linear-gradient(90deg, #ff9a5a, #ff5c8a);
+    border-color: transparent;
+    color: #ffffff;
+}
+
+/* результат теста */
+.test-result {
+    margin-top: 12px;
+    padding: 12px 14px;
+
+    border-radius: 14px;
+    background: rgba(255,255,255,0.06);
+
+    font-size: 14px;
+    color: rgba(255,255,255,0.85);
+    line-height: 1.4;
+}
+/* =========================
+   BODY / HEALTH
+========================= */
+
+.body {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+}
+
+.body-header {
+    text-align: center;
+}
+
+.body-header p {
+    font-size: 15px;
+    color: rgba(255,255,255,0.7);
+}
+
+/* ===== OVERVIEW ===== */
+.body-overview {
+    background: linear-gradient(
+            135deg,
+            rgba(255,154,90,0.18),
+            rgba(255,92,138,0.18)
+    );
+}
+
+.overview-title {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
+.overview-text {
+    font-size: 14px;
+    color: rgba(255,255,255,0.7);
+    margin-bottom: 14px;
+}
+
+.overview-metrics {
+    display: flex;
+    gap: 12px;
+}
+
+.metric {
+    flex: 1;
+    background: rgba(0,0,0,0.25);
+    border-radius: 16px;
+    padding: 14px;
+    text-align: center;
+}
+
+.metric-value {
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.metric-label {
+    font-size: 13px;
+    color: rgba(255,255,255,0.6);
+}
+
+/* ===== WATER ===== */
+.water-tracker {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.water-glass {
+    width: 28px;
+    height: 36px;
+    border-radius: 6px;
+    border: 2px solid rgba(255,255,255,0.3);
+    cursor: pointer;
+}
+
+.water-glass.filled {
+    background: linear-gradient(180deg, #ff9a5a, #ff5c8a);
+    border-color: transparent;
+}
+
+.water-info {
+    margin-top: 8px;
+    font-size: 14px;
+    color: rgba(255,255,255,0.8);
+}
+
+/* ===== SLEEP ===== */
+.sleep-options {
+    display: flex;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.sleep-btn {
+    flex: 1;
+    padding: 12px;
+    border-radius: 14px;
+    border: 1px solid rgba(255,255,255,0.15);
+    background: #1b1b21;
+    color: rgba(255,255,255,0.85);
+    cursor: pointer;
+}
+
+.sleep-btn.selected {
+    background: linear-gradient(90deg, #ff9a5a, #ff5c8a);
+    border: none;
+    color: #fff;
+}
+
+.sleep-info {
+    margin-top: 8px;
+    font-size: 14px;
+    color: rgba(255,255,255,0.8);
+}
+.water-progress {
+    width: 100%;
+    height: 8px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 999px;
+    margin-top: 10px;
+    overflow: hidden;
+}
+
+.water-progress-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #ff9a5a, #ff5c8a);
+    transition: width 0.25s ease;
+}
+/* ===== SLEEP ===== */
+.sleep-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.sleep-adjust {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    border: none;
+    background: #1b1b21;
+    color: #fff;
+    font-size: 22px;
+}
+
+.sleep-value {
+    font-size: 18px;
+    font-weight: 500;
+}
+
+/* ===== TIPS MODAL ===== */
+.tips-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.55);
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+    z-index: 100;
+}
+
+.tips-modal.show {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.tips-content {
+    background: #111;
+    width: 100%;
+    border-radius: 24px 24px 0 0;
+    padding: 20px;
+    transform: translateY(100%);
+    transition: transform 0.25s ease;
+}
+
+.tips-modal.show .tips-content {
+    transform: translateY(0);
+}
+
+.tips-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+
+.tips-text {
+    font-size: 15px;
+    line-height: 1.5;
+    opacity: 0.9;
+    margin-bottom: 16px;
+}
+/* ===== WATER CONTROLS ===== */
+.water-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 10px;
+}
+
+.water-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: none;
+    font-size: 22px;
+    font-weight: 600;
+    cursor: pointer;
+
+    background: linear-gradient(135deg, #3b82f6, #06b6d4);
+    color: #fff;
+
+    transition: transform 0.12s ease, opacity 0.12s ease;
+}
+
+.water-btn:active {
+    transform: scale(0.95);
+    opacity: 0.85;
+}
+
+.water-count {
+    font-size: 16px;
+    font-weight: 500;
+}
+/* ===== BODY SCREEN ===== */
+
+.body-screen {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding-bottom: 90px; /* чтобы не залезало под нижнее меню */
+}
+
+/* Баллы */
+.points-card {
+    background: linear-gradient(135deg, #4f46e5, #6366f1);
+    color: white;
+    border-radius: 20px;
+    padding: 20px;
+    text-align: center;
+}
+
+.points-title {
+    font-size: 14px;
+    opacity: 0.9;
+}
+
+.points-value {
+    font-size: 36px;
+    font-weight: 700;
+    margin: 8px 0;
+}
+
+.points-sub {
+    font-size: 12px;
+    opacity: 0.8;
+}
+
+/* Карточки */
+.metric-card {
+    background: #1e1e1e;
+    border-radius: 18px;
+    padding: 16px;
+    color: white;
+}
+
+.metric-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 16px;
+    margin-bottom: 12px;
+}
+
+/* Кнопки воды */
+.metric-controls {
+    display: flex;
+    gap: 12px;
+}
+
+.metric-controls button {
+    flex: 1;
+    height: 44px;
+    border-radius: 12px;
+    border: none;
+    font-size: 22px;
+    background: #2a2a2a;
+    color: white;
+}
+
+.metric-controls button:active {
+    transform: scale(0.96);
+}
+
+/* Range (сон) */
+.metric-card input[type="range"] {
+    width: 100%;
+}
+
+/* Шаги */
+.metric-card input[type="number"] {
+    width: 100%;
+    height: 44px;
+    border-radius: 12px;
+    border: none;
+    padding: 0 12px;
+    font-size: 16px;
+    background: #2a2a2a;
+    color: white;
+}
+/* ================================
+   BODY SCREEN (Тело)
+   ================================ */
+
+.body-screen {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding-bottom: 96px; /* чтобы не перекрывалось нижним меню */
+}
+
+/* ===== Баллы ===== */
+
+.points-card {
+    background: linear-gradient(135deg, #4f46e5, #6366f1);
+    border-radius: 20px;
+    padding: 20px;
+    color: #fff;
+    text-align: center;
+}
+
+.points-title {
+    font-size: 14px;
+    opacity: 0.9;
+}
+
+.points-value {
+    font-size: 36px;
+    font-weight: 700;
+    margin: 6px 0;
+}
+
+.points-sub {
+    font-size: 12px;
+    opacity: 0.8;
+}
+
+/* ===== Карточки ===== */
+
+.metric-card {
+    background: #1e1e1e;
+    border-radius: 18px;
+    padding: 16px;
+    color: #fff;
+}
+
+/* Заголовок карточки */
+.metric-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 16px;
+    margin-bottom: 12px;
+}
+
+/* ===== Вода ===== */
+
+.metric-controls {
+    display: flex;
+    gap: 12px;
+}
+
+.metric-controls button {
+    flex: 1;
+    height: 44px;
+    border-radius: 14px;
+    border: none;
+    font-size: 24px;
+    background: #2a2a2a;
+    color: #fff;
+}
+
+.metric-controls button:active {
+    transform: scale(0.94);
+}
+
+/* ===== Сон (iOS-style) ===== */
+
+.sleep-control {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #2a2a2a;
+    border-radius: 16px;
+    padding: 12px;
+    user-select: none;
+}
+
+.sleep-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: none;
+    background: #3a3a3a;
+    color: #fff;
+    font-size: 24px;
+}
+
+.sleep-btn:active {
+    transform: scale(0.9);
+}
+
+.sleep-display {
+    font-size: 28px;
+    font-weight: 600;
+}
+
+/* ===== Шаги ===== */
+
+.native-number {
+    width: 100%;
+    height: 48px;
+    border-radius: 14px;
+    border: none;
+    padding: 0 14px;
+    font-size: 17px;
+    background: #2a2a2a;
+    color: #fff;
+}
+
+.native-number::placeholder {
+    opacity: 0.5;
+}
+
+.native-number:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px #4f46e5;
+}
+
+/* ===== Мотивация ===== */
+
+.motivation {
+    text-align: center;
+    font-size: 14px;
+    color: #c7c7ff;
+    opacity: 0.9;
+    margin-top: 4px;
+}
+/* ===== Сон: iOS picker ===== */
+
+.sleep-picker {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 6px;
+}
+
+.sleep-step {
+    height: 36px;
+    border-radius: 10px;
+    background: #2a2a2a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    color: #ccc;
+}
+
+.sleep-step.active {
+    background: #4f46e5;
+    color: #fff;
+    font-weight: 600;
+}
+
+/* ===== Шаги ===== */
+
+.steps-input {
+    display: flex;
+    gap: 10px;
+}
+
+.steps-save {
+    height: 48px;
+    padding: 0 16px;
+    border-radius: 14px;
+    border: none;
+    background: #4f46e5;
+    color: #fff;
+    font-size: 15px;
+}
+
+.steps-save:active {
+    transform: scale(0.96);
+}
+/* ================================
+   MIND SCREEN
+   ================================ */
+
+.mind-screen {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding-bottom: 96px;
+}
+
+/* ===== SOS ===== */
+
+.sos-card {
+    background: linear-gradient(135deg, #ef4444, #f97316);
+    border-radius: 20px;
+    padding: 20px;
+    color: white;
+    text-align: center;
+}
+
+.sos-title {
+    font-size: 14px;
+    opacity: 0.9;
+    margin-bottom: 12px;
+}
+
+.sos-button {
+    width: 100%;
+    height: 48px;
+    border-radius: 14px;
+    border: none;
+    background: white;
+    color: #111;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.sos-button:active {
+    transform: scale(0.96);
+}
+
+/* ===== Mood ===== */
+
+.mood-picker {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.mood-btn {
+    flex: 1;
+    background: #2a2a2a;
+    border-radius: 14px;
+    border: none;
+    padding: 10px 6px;
+    color: white;
+    text-align: center;
+}
+
+.mood-btn.active {
+    background: #4f46e5;
+}
+
+.mood-emoji {
+    font-size: 22px;
+}
+
+.mood-label {
+    font-size: 11px;
+    margin-top: 4px;
+    opacity: 0.85;
+}
+
+/* ===== Help ===== */
+
+.help-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.help-list button {
+    height: 44px;
+    border-radius: 14px;
+    border: none;
+    background: #2a2a2a;
+    color: white;
+    text-align: left;
+    padding: 0 14px;
+}
+
+.help-list button:active {
+    transform: scale(0.97);
+}
+
+/* ===== Content ===== */
+
+.mind-box {
+    background: #1e1e1e;
+    border-radius: 18px;
+    padding: 16px;
+    color: white;
+}
+
+.mind-box h3 {
+    margin-bottom: 8px;
+}
+
+.mind-box ul {
+    padding-left: 18px;
+}
+
+.mind-box li {
+    margin-bottom: 6px;
+}
+/* ================================
+   SOS BREATHING BUTTON
+   ================================ */
+
+.sos-breathe {
+    display: flex;
+    justify-content: center;
+    margin: 12px 0 20px;
+}
+
+.breathe-circle {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    background: radial-gradient(circle at top, #fb7185, #ef4444);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    text-align: center;
+    box-shadow:
+            0 10px 30px rgba(239, 68, 68, 0.45),
+            inset 0 -6px 12px rgba(0,0,0,0.2);
+    transition: transform 4s ease-in-out;
+}
+
+.breathe-circle:active {
+    transform: scale(0.96);
+}
+
+.breathe-circle.inhale {
+    transform: scale(1.25);
+}
+
+.breathe-text {
+    padding: 10px;
+    line-height: 1.3;
+}
+
+/* плавное "дыхание" даже без текста */
+.breathe-circle.breathing {
+    animation: pulseGlow 6s ease-in-out infinite;
+}
+
+@keyframes pulseGlow {
+    0%   { box-shadow: 0 0 0 rgba(239,68,68,0.4); }
+    50%  { box-shadow: 0 0 40px rgba(239,68,68,0.6); }
+    100% { box-shadow: 0 0 0 rgba(239,68,68,0.4); }
+}
+/* ===== SOS BUTTON ===== */
+
+/* ================= SOS overlay & breathing (RAF-driven) ================= */
+
+.sos-card {
+    background: linear-gradient(135deg, #ef4444, #f97316);
+    border-radius: 16px;
+    padding: 16px;
+    text-align: center;
+    color: white;
+}
+
+.sos-title { font-size: 14px; opacity: 0.95; margin-bottom: 12px; }
+
+.sos-main-btn {
+    width: 100%;
+    height: 48px;
+    border-radius: 14px;
+    border: none;
+    background: #ef4444;
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.sos-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+}
+
+.sos-overlay:not(.hidden) { opacity: 1; pointer-events: auto; }
+
+.sos-overlay-content {
+    background: #111;
+    border-radius: 24px;
+    padding: 28px 24px 24px;
+    text-align: center;
+    color: white;
+    width: 80%;
+    max-width: 360px;
+}
+
+.sos-intro-text { max-width: 280px; margin: 0 auto 20px; font-size: 15px; line-height: 1.5; opacity: 0.95; }
+
+.sos-step { text-align: center; }
+
+.sos-animate { opacity: 0; transform: translateY(12px); transition: opacity 0.32s ease, transform 0.32s ease; }
+.sos-animate.show { opacity: 1; transform: translateY(0); }
+
+.sos-progress { font-size: 14px; opacity: 0.85; margin-bottom: 14px; }
+
+/* breath circle — no CSS animation, RAF controls transform directly */
+.breath-circle {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: #ef4444;
+    margin: 12px auto;
+    transform: scale(1);
+    will-change: transform;
+}
+
+/* text & buttons */
+.breath-text { font-size: 20px; margin-bottom: 12px; }
+.sos-finish-text { font-size: 18px; margin-bottom: 16px; }
+
+.close-sos, .sos-main-btn, #cancelBreathing {
+    width: 100%;
+    height: 44px;
+    border-radius: 12px;
+    border: none;
+    background: #2a2a2a;
+    color: white;
+}
+
+
+/* ===== Growth screen ===== */
+
+/* ===== Growth / Pomodoro ===== */
+
+.growth-screen {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.pomodoro-time {
+    font-size: 32px;
+    font-weight: 700;
+    text-align: center;
+    margin: 12px 0;
+}
+
+.pomodoro-mode {
+    font-size: 12px;
+    opacity: 0.8;
+}
+
+.pomodoro-presets {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.preset-btn {
+    flex: 1;
+    height: 36px;
+    border-radius: 10px;
+    border: none;
+    background: #1f2933;
+    color: white;
+    font-size: 14px;
+}
+
+.preset-btn.active {
+    background: #2563eb;
+}
+
+.preset-btn:disabled {
+    opacity: 0.4;
+}
+
+.pomodoro-btn {
+    width: 100%;
+    height: 44px;
+    border-radius: 12px;
+    border: none;
+    background: #16a34a;
+    color: white;
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.growth-text {
+    font-size: 14px;
+    opacity: 0.9;
+    margin-bottom: 8px;
+}
+
+.test-options {
+    display: flex;
+    gap: 8px;
+}
+
+.test-options button {
+    flex: 1;
+    height: 40px;
+    border-radius: 10px;
+    border: none;
+    background: #2a2a2a;
+    color: white;
+    font-size: 14px;
+}
+
+.test-result {
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+.soft-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.soft-item {
+    background: #1f2933;
+    padding: 10px 12px;
+    border-radius: 10px;
+    font-size: 14px;
+}
+
+/* ===== Profile screen ===== */
+
+.profile-screen {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* Header */
+
+.profile-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 0;
+}
+
+.profile-avatar {
+    width: 88px;
+    height: 88px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: #1f2933;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.profile-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.avatar-placeholder {
+    font-size: 32px;
+}
+
+.profile-name {
+    font-size: 18px;
+    font-weight: 700;
+}
+
+/* Stats */
+
+.profile-stats {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.stat-item {
+    flex: 1;
+    background: #1f2933;
+    border-radius: 12px;
+    padding: 12px 8px;
+    text-align: center;
+}
+
+.stat-value {
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.stat-label {
+    font-size: 12px;
+    opacity: 0.8;
+}
+
+/* Challenge */
+
+.challenge-box {
+    background: #1f2933;
+    border-radius: 12px;
+    padding: 12px;
+}
+
+.challenge-box.done {
+    background: #064e3b;
+}
+
+.challenge-text {
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.challenge-btn {
+    width: 100%;
+    height: 40px;
+    border-radius: 10px;
+    border: none;
+    background: #16a34a;
+    color: white;
+    font-weight: 600;
+}
+
+.challenge-done {
+    font-size: 14px;
+    color: #86efac;
+}
+
+/* Footer */
+
+.profile-footer {
+    text-align: center;
+    font-size: 13px;
+    opacity: 0.8;
+    margin-top: 8px;
+}

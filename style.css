@@ -1,0 +1,152 @@
+/* ===== RESET ===== */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+html, body {
+    height: 100%;
+}
+
+/* ===== BODY ===== */
+body {
+    background: linear-gradient(180deg, #ff9a5a 0%, #ff5c8a 100%);
+    color: #ffffff;
+}
+
+/* ===== SCREEN ===== */
+.screen {
+    height: 100%;
+    padding: 32px 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* ===== CONTENT ===== */
+.content {
+    flex: 1;
+    max-width: 320px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+
+    transform: translateY(-40px);
+}
+
+/* ===== LOGO ===== */
+.logo {
+    width: 112px;
+    height: 112px;
+    border-radius: 28px;
+    margin-bottom: 24px;
+}
+
+/* ===== TEXT ===== */
+.content h1 {
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+
+.content p {
+    font-size: 16px;
+    line-height: 1.4;
+    opacity: 0.9;
+}
+
+/* ===== BUTTON ===== */
+.start-btn {
+    width: 100%;
+    max-width: 320px;
+
+    padding: 16px;
+    margin-bottom: 20px;
+
+    font-size: 16px;
+    font-weight: 500;
+
+    background: #ffffff;
+    color: #ff5c8a;
+
+    border: none;
+    border-radius: 16px;
+    cursor: pointer;
+
+    transition: transform 0.12s ease, opacity 0.12s ease;
+}
+
+.start-btn:active {
+    transform: scale(0.97);
+    opacity: 0.9;
+}
+
+/* ===== ACCESS DENIED ===== */
+.denied {
+    height: 100%;
+    padding: 24px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.denied h1 {
+    font-size: 22px;
+    margin-bottom: 12px;
+}
+
+.denied p {
+    font-size: 16px;
+    opacity: 0.85;
+}
+/* ===== Улучшенный нативный UI ===== */
+
+.native-range {
+    width: 100%;
+    appearance: auto; /* важно: нативный вид */
+}
+
+.range-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    opacity: 0.6;
+    margin-top: 4px;
+}
+
+.native-number {
+    width: 100%;
+    height: 48px;
+    border-radius: 14px;
+    border: none;
+    padding: 0 14px;
+    font-size: 17px;
+    background: #2a2a2a;
+    color: white;
+}
+
+.native-number::placeholder {
+    opacity: 0.5;
+}
+
+.native-number:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px #4f46e5;
+}
+
+/* Мотивация */
+.motivation {
+    margin-top: 8px;
+    text-align: center;
+    font-size: 14px;
+    opacity: 0.85;
+    color: #c7c7ff;
+}

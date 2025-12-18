@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Моё благополучие</title>
+    <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="screen">
+    <div class="content">
+        <img src="logo.png" class="logo" alt="Логотип">
+        <h1>Моё благополучие</h1>
+        <p>
+            Цифровое пространство, где ты выстраиваешь баланс
+            между состоянием, развитием и собой.
+        </p>
+    </div>
+
+    <button class="start-btn" id="startBtn">Начать</button>
+</div>
+
+<script>
+    const tg = window.Telegram && window.Telegram.WebApp;
+
+    if (!tg || !tg.initData) {
+        document.body.innerHTML = `
+            <div class="denied">
+                <h1>Доступ ограничен</h1>
+                <p>Приложение доступно только в Telegram</p>
+            </div>
+        `;
+    } else {
+        tg.expand();
+        document.getElementById("startBtn").onclick = () => {
+            window.location.href = "app.html";
+        };
+    }
+</script>
+
+</body>
+</html>

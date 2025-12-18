@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Моё благополучие</title>
+
+    <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+
+    <link rel="stylesheet" href="app.css">
+</head>
+<body>
+
+<div class="app">
+
+    <div class="app-content" id="appContent">
+        <h2>Загрузка...</h2>
+    </div>
+
+    <div class="bottom-nav">
+        <button class="nav-item active" data-tab="body">
+            <span class="icon icon-body"></span>
+            <span>Тело</span>
+        </button>
+        <button class="nav-item" data-tab="mind">
+            <span class="icon icon-mind"></span>
+            <span>Душа</span>
+        </button>
+        <button class="nav-item" data-tab="growth">
+            <span class="icon icon-growth"></span>
+            <span>Развитие</span>
+        </button>
+        <button class="nav-item" data-tab="profile">
+            <span class="icon icon-profile"></span>
+            <span>Профиль</span>
+        </button>
+    </div>
+
+</div>
+
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script type="module" src="main.js"></script>
+</body>
+</html>

@@ -7,7 +7,7 @@
 
 html, body {
     height: 100%;
-    background: #121216;
+    background: #242424;
     color: #ffffff;
 }
 
@@ -46,7 +46,7 @@ html, body {
     justify-content: space-between;
     align-items: center;
 
-    background: #1b1b21;
+    background: #1B1B1B;
     border-radius: 22px;
 }
 
@@ -1141,248 +1141,262 @@ html, body {
 .mind-screen {
     display: flex;
     flex-direction: column;
-    gap: 16px;
-    padding-bottom: 96px;
+    gap: 6px;
+    padding: 8px;
 }
-
-/* ===== SOS ===== */
+/* ---------- SOS CARD ---------- */
 
 .sos-card {
-    background: linear-gradient(135deg, #ef4444, #f97316);
-    border-radius: 20px;
-    padding: 20px;
-    color: white;
+    margin-top: -10px;
+    position: relative;
+    border-radius: 22px;
+    overflow: hidden;
+    min-height: 240px;
+    margin-bottom: 16px;
+    background: #0b1220;
+    box-shadow: 0 12px 32px rgba(0,0,0,0.45);
+}
+
+
+.sos-card-bg {
+    position: absolute;
+    inset: 0;
+
+    /* СЛОИ: градиент + картинка */
+    background:
+            linear-gradient(
+                    360deg,
+                    rgba(34, 59, 71, 0.85) 0%,
+                    rgba(34, 59, 71, 0.55) 35%,
+                    rgba(34, 59, 71, 0.15) 70%,
+                    rgba(34, 59, 71, 0) 100%
+            ),
+            url("../icons/clouds.png");
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    /* мягкость как в iOS */
+    filter: saturate(0.85) contrast(0.95);
+}
+
+.sos-card-content {
+    position: relative;
+    z-index: 1;
+    height: 100%;
+    padding: 20px 20px 0px 20px;
     text-align: center;
+    color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    text-shadow: 0 6px 20px rgba(0,0,0,0.35);
+}
+
+
+/* text */
+
+.sos-caption {
+    font-size: 13px;
+    opacity: 0.7;
+    margin-bottom: 6px;
+    margin-top: -8px;
+    color: #858585;
 }
 
 .sos-title {
-    font-size: 14px;
-    opacity: 0.9;
-    margin-bottom: 12px;
+    margin-top: 70px;
+    font-size: 28px;
+    font-weight: 800;
+    line-height: 1.05;
+
 }
 
-.sos-button {
-    width: 100%;
-    height: 48px;
-    border-radius: 14px;
-    border: none;
-    background: white;
-    color: #111;
-    font-size: 16px;
-    font-weight: 600;
-}
-
-.sos-button:active {
-    transform: scale(0.96);
-}
-
-/* ===== Mood ===== */
-
-.mood-picker {
-    display: flex;
-    justify-content: space-between;
-    gap: 8px;
-}
-
-.mood-btn {
-    flex: 1;
-    background: #2a2a2a;
-    border-radius: 14px;
-    border: none;
-    padding: 10px 6px;
-    color: white;
-    text-align: center;
-}
-
-.mood-btn.active {
-    background: #4f46e5;
-}
-
-.mood-emoji {
-    font-size: 22px;
-}
-
-.mood-label {
-    font-size: 11px;
-    margin-top: 4px;
+.sos-subtitle {
+    color: #cdcdcd;
+    font-size: 15px;
     opacity: 0.85;
-}
-
-/* ===== Help ===== */
-
-.help-list {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.help-list button {
-    height: 44px;
-    border-radius: 14px;
-    border: none;
-    background: #2a2a2a;
-    color: white;
-    text-align: left;
-    padding: 0 14px;
-}
-
-.help-list button:active {
-    transform: scale(0.97);
-}
-
-/* ===== Content ===== */
-
-.mind-box {
-    background: #1e1e1e;
-    border-radius: 18px;
-    padding: 16px;
-    color: white;
-}
-
-.mind-box h3 {
-    margin-bottom: 8px;
-}
-
-.mind-box ul {
-    padding-left: 18px;
-}
-
-.mind-box li {
-    margin-bottom: 6px;
-}
-/* ================================
-   SOS BREATHING BUTTON
-   ================================ */
-
-.sos-breathe {
-    display: flex;
-    justify-content: center;
-    margin: 12px 0 20px;
-}
-
-.breathe-circle {
-    width: 140px;
-    height: 140px;
-    border-radius: 50%;
-    background: radial-gradient(circle at top, #fb7185, #ef4444);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-size: 16px;
-    font-weight: 600;
-    text-align: center;
-    box-shadow:
-            0 10px 30px rgba(239, 68, 68, 0.45),
-            inset 0 -6px 12px rgba(0,0,0,0.2);
-    transition: transform 4s ease-in-out;
-}
-
-.breathe-circle:active {
-    transform: scale(0.96);
-}
-
-.breathe-circle.inhale {
-    transform: scale(1.25);
-}
-
-.breathe-text {
-    padding: 10px;
     line-height: 1.3;
 }
 
-/* плавное "дыхание" даже без текста */
-.breathe-circle.breathing {
-    animation: pulseGlow 6s ease-in-out infinite;
+/* tap icon */
+
+
+.sos-tap-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    background-image: url("../icons/finger.svg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 28px 28px; /* КЛЮЧЕВО */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
 }
 
-@keyframes pulseGlow {
-    0%   { box-shadow: 0 0 0 rgba(239,68,68,0.4); }
-    50%  { box-shadow: 0 0 40px rgba(239,68,68,0.6); }
-    100% { box-shadow: 0 0 0 rgba(239,68,68,0.4); }
-}
-/* ===== SOS BUTTON ===== */
 
-/* ================= SOS overlay & breathing (RAF-driven) ================= */
+/* ---------- BLOCKS ---------- */
 
-.sos-card {
-    background: linear-gradient(135deg, #ef4444, #f97316);
-    border-radius: 16px;
-    padding: 16px;
-    text-align: center;
-    color: white;
+/* ---------- MOOD BLOCK ---------- */
+
+/* ---------- MOOD ROW ---------- */
+
+/* ---------- MOOD BLOCK SPACING ---------- */
+
+.mind-block {
+    margin-bottom: 32px;
 }
 
-.sos-title { font-size: 14px; opacity: 0.95; margin-bottom: 12px; }
+.mood-row {
+    display: flex;
+    gap: 14px;
+    margin-top: 12px;
+}
 
-.sos-main-btn {
+/* ---------- MOOD PILL ---------- */
+
+.mood-pill {
+    flex: 1;
+    height: 56px;
+    border-radius: 18px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background-color: transparent;
+    border: 2px solid transparent;
+    cursor: pointer;
+
+    transition:
+            background-color 160ms ease,
+            box-shadow 160ms ease,
+            border-color 160ms ease;
+}
+
+/* ---------- ICON ---------- */
+
+.mood-icon {
+    width: 24px;
+    height: 24px;
+    transition: filter 160ms ease;
+}
+
+/* ---------- DEFAULT OUTLINES ---------- */
+
+.mood-blue { border-color: #499CD7; }
+.mood-gray { border-color: #FFFFFF; }
+.mood-green { border-color: #308D62; }
+
+/* ---------- ACTIVE STATES ---------- */
+
+/* 🔵 BLUE */
+.mood-blue.active {
+    background-color: #499CD7;
+    border-color: transparent;
+    box-shadow: 0 6px 16px rgba(73,156,215,0.35);
+}
+.mood-blue.active .mood-icon {
+    filter: brightness(0) invert(1);
+}
+
+/* ⚪ GRAY */
+.mood-gray.active {
+    background-color: #FFFFFF;
+    border-color: transparent;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+}
+.mood-gray.active .mood-icon {
+    filter: brightness(0) saturate(100%);
+}
+
+/* 🟢 GREEN */
+.mood-green.active {
+    background-color: #308D62;
+    border-color: transparent;
+    box-shadow: 0 6px 16px rgba(48,141,98,0.35);
+}
+.mood-green.active .mood-icon {
+    filter: brightness(0) invert(1);
+}
+
+/* ---------- LOCKED ---------- */
+
+.mood-row.locked .mood-pill:not(.active) {
+    opacity: 0.3;
+    pointer-events: none;
+}
+
+/* ---------- SAVE BUTTON ---------- */
+
+.mood-save-btn {
     width: 100%;
     height: 48px;
-    border-radius: 14px;
+    margin-top: 20px;
+
+    border-radius: 16px;
     border: none;
-    background: #ef4444;
-    color: white;
+
+    background: #1f2937; /* спокойный нейтральный */
+    color: #9ca3af;
+
+    font-size: 15px;
+    font-weight: 600;
+
+    cursor: default;
+    transition: background-color 160ms ease, box-shadow 160ms ease, color 160ms ease;
+}
+
+.mood-save-btn:not(:disabled) {
+    background: linear-gradient(180deg, #2563eb, #1d4ed8);
+    color: #ffffff;
+    cursor: pointer;
+    box-shadow: 0 8px 20px rgba(37,99,235,0.35);
+}
+
+.mood-save-btn:active:not(:disabled) {
+    box-shadow: 0 4px 12px rgba(37,99,235,0.45);
+}
+
+/* ---------- RESPONSIVE ---------- */
+
+@media (max-width: 420px) {
+    .mood-pill {
+        height: 50px;
+        border-radius: 14px;
+    }
+    .mood-icon {
+        width: 20px;
+        height: 20px;
+    }
+}
+
+
+
+/* ---------- HELP ---------- */
+
+.help-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(255,255,255,0.06);
+    border-radius: 18px;
+    padding: 18px;
     font-size: 16px;
     font-weight: 600;
 }
 
-.sos-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.7);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.25s ease;
+.help-arrow {
+    font-size: 22px;
+    opacity: 0.5;
 }
 
-.sos-overlay:not(.hidden) { opacity: 1; pointer-events: auto; }
 
-.sos-overlay-content {
-    background: #111;
-    border-radius: 24px;
-    padding: 28px 24px 24px;
-    text-align: center;
-    color: white;
-    width: 80%;
-    max-width: 360px;
-}
 
-.sos-intro-text { max-width: 280px; margin: 0 auto 20px; font-size: 15px; line-height: 1.5; opacity: 0.95; }
 
-.sos-step { text-align: center; }
-
-.sos-animate { opacity: 0; transform: translateY(12px); transition: opacity 0.32s ease, transform 0.32s ease; }
-.sos-animate.show { opacity: 1; transform: translateY(0); }
-
-.sos-progress { font-size: 14px; opacity: 0.85; margin-bottom: 14px; }
-
-/* breath circle — no CSS animation, RAF controls transform directly */
-.breath-circle {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    background: #ef4444;
-    margin: 12px auto;
-    transform: scale(1);
-    will-change: transform;
-}
-
-/* text & buttons */
-.breath-text { font-size: 20px; margin-bottom: 12px; }
-.sos-finish-text { font-size: 18px; margin-bottom: 16px; }
-
-.close-sos, .sos-main-btn, #cancelBreathing {
-    width: 100%;
-    height: 44px;
-    border-radius: 12px;
-    border: none;
-    background: #2a2a2a;
-    color: white;
-}
 
 
 /* ===== Growth screen ===== */

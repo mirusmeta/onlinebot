@@ -10,6 +10,8 @@
 
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/mind.css">
+
 </head>
 <body>
 
@@ -30,12 +32,13 @@
     const tg = window.Telegram && window.Telegram.WebApp;
 
     if (!tg || !tg.initData) {
-        document.body.innerHTML = `
-            <div class="denied">
-                <h1>Доступ ограничен</h1>
-                <p>Приложение доступно только в Telegram</p>
-            </div>
-        `;
+        // document.body.innerHTML = `
+        //     <div class="denied">
+        //         <h1>Доступ ограничен</h1>
+        //         <p>Приложение доступно только в Telegram</p>
+        //     </div>
+        // `;
+
     } else {
         tg.expand();
         document.getElementById("startBtn").onclick = () => {

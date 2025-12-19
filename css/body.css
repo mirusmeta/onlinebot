@@ -1,0 +1,184 @@
+.advice-card {
+    position: relative;
+    width: 100%;
+    height: 100px;
+    background-image: url('../icons/leaf_back.png');
+    background-size: cover;
+    background-position: center;
+    border-radius: 24px;
+    overflow: hidden;
+    margin-top: 20px;
+    padding: 20px;
+    box-sizing: border-box;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Распределяет пространство между header и bottom */
+}
+
+.advice-header {
+    text-align: center;
+    margin-top: -5px;
+
+}
+
+.advice-title {
+    margin: 0;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.advice-bottom-image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: auto; /* Прижимает к низу */
+}
+
+.bottom-img {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    background-image: url("/icons/finger.svg");
+    background-repeat: no-repeat;
+    background-position: bottom;
+    background-size: 28px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Стили для трекер-карточек */
+.horizontal-cards {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+    width: 100%;
+}
+
+.tracker-card {
+    flex: 1;
+    height: 300px;
+    border-radius: 24px;
+    overflow: hidden;
+    position: relative;
+    box-sizing: border-box;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    color: white;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Карточка воды */
+.water-card {
+    /* Фон будет установлен через .card-progress-bg */
+}
+
+/* Карточка сна */
+.sleep-card {
+    /* Фон будет установлен через .card-progress-bg */
+}
+
+/* Заголовок по центру */
+.card-header {
+    text-align: center;
+    margin-bottom: 10px;
+    z-index: 2;
+    position: relative;
+}
+
+.card-title {
+    margin: 0;
+    font-size: 32px;
+    font-weight: bold;
+}
+
+.card-content {
+    margin-top: auto;
+    z-index: 2;
+    position: relative;
+}
+
+.card-main-value {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    text-align: center;
+    line-height: 1.2;
+}
+
+.card-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.action-text {
+    font-size: 18px;
+    font-weight: 500;
+    min-width: 80px;
+    text-align: center;
+}
+
+.minus-btn, .plus-btn {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.minus-btn img, .plus-btn img {
+    width: 26px;
+    height: 26px;
+    filter: brightness(0) invert(1);
+}
+
+/* Стили для прогресс-бара как фона */
+.card-progress-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+}
+
+.card-progress-fill {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1;
+    transition: height 0.5s ease;
+}
+
+/* Конкретные цвета для карточек */
+.water-card .card-progress-bg {
+    background-image: url('../icons/water-bg.png');
+    background-size: cover;
+    background-position: center;
+    opacity: 0.3;
+}
+
+.water-card .card-progress-fill {
+    background: #0082C3;
+}
+
+.sleep-card .card-progress-bg {
+    background-image: url('../icons/night_back_darker.png');
+    background-size: cover;
+    background-position: center;
+}
+
+.sleep-card .card-progress-fill {
+    background-image: url('../icons/night_back.png');
+    background-size: cover;
+    background-position: center;
+}

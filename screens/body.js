@@ -49,72 +49,64 @@ export function renderBody(container) {
 
     container.innerHTML = `
     <section class="body-screen">
-
-      <!-- Баллы -->
-      <div class="points-card">
-        <div class="points-title">Баллы благополучия</div>
-        <div class="points-value">${data.points}</div>
-        <div class="points-sub">Сегодня</div>
-      </div>
-
-      <!-- Вода -->
-      <div class="metric-card">
-        <div class="metric-header">
-          <span>💧 Вода</span>
-          <span>${data.water} стак.</span>
+        <!-- Карточка с полезными советами -->
+        <div class="advice-card">
+            <div class="advice-header">
+                <h3 class="advice-title">Полезные советы</h3>
+            </div>
+            <div class="advice-bottom-image">
+                <div class="bottom-img"></div>
+            </div>
         </div>
-        <div class="metric-controls">
-          <button data-action="water-minus">−</button>
-          <button data-action="water-plus">+</button>
+        
+        <!-- Контейнер для двух горизонтальных карточек -->
+        <div class="horizontal-cards">
+            <!-- Карточка "Вода" -->
+            <div class="tracker-card water-card">
+                <div class="card-header">
+                    <h4 class="card-title">Вода</h4>
+                </div>
+                <div class="card-content">
+                    <div class="card-main-value">0.8л / 2л</div>
+                    <div class="card-buttons">
+                        <div class="minus-btn" data-action="remove-water">
+                            <img src="../icons/minus.svg">
+                        </div>
+                        <span class="action-text">200 мл</span>
+                        <div class="plus-btn" data-action="add-water">
+                            <img src="../icons/plus.svg">
+                        </div>
+                    </div>
+                </div>
+                <!-- Фоновый прогресс -->
+                <div class="card-progress-bg"></div>
+                <div class="card-progress-fill" style="height: 40%"></div>
+            </div>
+            
+            <!-- Карточка "Сон" -->
+            <div class="tracker-card sleep-card">
+                <div class="card-header">
+                    <h4 class="card-title">Сон</h4>
+                </div>
+                <div class="card-content">
+                    <div class="card-main-value">6ч / 7ч</div>
+                    <div class="card-buttons">
+                        <div class="minus-btn" data-action="remove-sleep">
+                            <img src="../icons/minus.svg">
+                        </div>
+                        <span class="action-text">1 час</span>
+                        <div class="plus-btn" data-action="add-sleep">
+                            <img src="../icons/plus.svg">
+                        </div>
+                    </div>
+                </div>
+                <!-- Фоновый прогресс -->
+                <div class="card-progress-bg"></div>
+                <div class="card-progress-fill" style="height: 85%"></div>
+            </div>
         </div>
-      </div>
-
-      <!-- Сон -->
-      <div class="metric-card">
-        <div class="metric-header">
-          <span>😴 Сон</span>
-          <span>${data.sleep} ч</span>
-        </div>
-
-        <div class="metric-controls">
-          <button data-action="sleep-minus">−</button>
-          <button data-action="sleep-plus">+</button>
-        </div>
-
-        <div class="sleep-progress">
-          <div class="sleep-progress-bar" style="width:${sleepPercent}%"></div>
-        </div>
-        <div style="margin-top: 10px; font-size: 14px" class="sleep-hint">* Рекомендуется 7–9 часов</div>
-      </div>
-
-      <!-- Шаги -->
-      <div class="metric-card">
-        <div class="metric-header">
-          <span>🚶 Шаги</span>
-        </div>
-
-        <div class="steps-input">
-          <input
-            type="number"
-            inputmode="numeric"
-            pattern="[0-9]*"
-            placeholder="Например: 6500"
-            value="${data.steps || ""}"
-            data-action="steps-input"
-          />
-          <button class="steps-save" data-action="steps-save">
-            Сохранить
-          </button>
-        </div>
-      </div>
-
-      <!-- Мотивация -->
-      <div class="motivation-card">
-        ${getMotivation(data.points)}
-      </div>
-
     </section>
-  `;
+`;
 
     bindEvents(container);
 }

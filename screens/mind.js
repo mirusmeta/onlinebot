@@ -58,9 +58,8 @@ export function renderMind(container) {
 
 
       <!-- ПОМОЩЬ -->
-      <div class="mind-block">
+      <div style="margin-top: 8px" class="mind-block">
         <h3 class="mind-title">Помощь с трудностями</h3>
-
         <div class="help-card">
           <span>Я стал(а) жертвой буллинга, что делать?</span>
           <span class="help-arrow">›</span>
@@ -77,9 +76,21 @@ export function renderMind(container) {
     
           <div class="sos-breathe">
             <div class="breathe-circle">
-              <div class="breathe-dot"></div>
+              <svg
+                class="breathe-svg"
+                viewBox="0 0 200 200"
+                width="200"
+                height="200"
+              >
+                <circle
+                  class="breathe-svg-dot"
+                  cx="100"
+                  cy="100"
+                  r="8"
+                />
+              </svg>
             </div>
-    
+
             <div class="breathe-text">Нажмите «Начать»</div>
     
             <button class="breathe-start" id="breatheStart">Начать</button>
@@ -92,6 +103,45 @@ export function renderMind(container) {
         </div>
       </div>
     `);
+    container.insertAdjacentHTML("beforeend", `
+      <div class="mind-advice-overlay" id="mindAdviceOverlay">
+        <div class="mind-advice-screen">
+    
+          <button class="mind-advice-back" id="mindAdviceBack">‹</button>
+    
+          <h1 class="mind-advice-title">
+            Я стал(а) жертвой буллинга,<br>что делать?
+          </h1>
+    
+          <div class="mind-advice-card">
+            <div class="mind-advice-author">
+              Ответ от Джеки-Чана, психолога
+            </div>
+    
+            <div class="mind-advice-text">
+              Если вы стали жертвой буллинга, не молчите:
+              немедленно расскажите доверенному взрослому
+              (родителям, учителю, психологу), не вините себя,
+              ищите поддержку (друзья, горячие линии),
+              собирайте доказательства (особенно если это онлайн
+              или есть физический вред), а в тяжёлых случаях —
+              обращайтесь в полицию (112). Главное — выйти из
+              ситуации, искать помощи и не оставаться одному.
+            </div>
+          </div>
+    
+          <div class="mind-advice-extra">Дополнительно:</div>
+    
+          <div class="mind-advice-link" id="mindAdviceLink">
+            <span>Найти психолога</span>
+            <span class="mind-advice-accent">профи.ру</span>
+            <span class="mind-advice-arrow">›</span>
+          </div>
+    
+        </div>
+      </div>
+    `);
+
 
 
     const tg = window.Telegram?.WebApp;
@@ -141,8 +191,8 @@ export function renderMind(container) {
     const sosBack = container.querySelector("#sosBack");
 
     const breatheText = container.querySelector(".breathe-text");
-    const breatheDot = container.querySelector(".breathe-dot");
     const startBtn = container.querySelector("#breatheStart");
+    const svgDot = container.querySelector(".breathe-svg-dot");
 
     const TOTAL_CYCLES = 10;
     let cycle = 0;
@@ -162,15 +212,38 @@ export function renderMind(container) {
         document.body.classList.remove("no-scroll");
     });
 
+    /* ---------- SVG ANIMATION ---------- */
+
+    function animateRadius(from, to, duration) {
+        const start = performance.now();
+
+        function frame(time) {
+            const progress = Math.min((time - start) / duration, 1);
+            const value = from + (to - from) * progress;
+            svgDot.setAttribute("r", value);
+
+            if (progress < 1) requestAnimationFrame(frame);
+        }
+
+        requestAnimationFrame(frame);
+    }
+
     /* ---------- BREATHING ---------- */
 
     function startBreathing() {
         cycle = 0;
         startBtn.disabled = true;
         startBtn.style.opacity = "0.4";
-
-        breatheDot.style.animationPlayState = "running";
         runCycle();
+    }
+
+    function stopBreathing() {
+        clearTimeout(timer);
+        animateRadius(90, 8, 500);
+        breatheText.textContent = "Нажмите «Начать»";
+        startBtn.disabled = false;
+        startBtn.style.opacity = "1";
+        startBtn.textContent = "Начать";
     }
 
     function runCycle() {
@@ -184,6 +257,7 @@ export function renderMind(container) {
         // ВДОХ
         breatheText.textContent = "Вдыхайте…";
         tg?.HapticFeedback?.impactOccurred("light");
+        animateRadius(8, 90, 2500);
 
         // ЗАДЕРЖКА
         setTimeout(() => {
@@ -194,33 +268,54 @@ export function renderMind(container) {
         setTimeout(() => {
             breatheText.textContent = "Выдыхайте…";
             tg?.HapticFeedback?.impactOccurred("soft");
+            animateRadius(90, 8, 3500);
         }, 3500);
 
-        // Следующий цикл (7 секунд)
         timer = setTimeout(runCycle, 7000);
     }
 
-
     function finishBreathing() {
         clearTimeout(timer);
-
-        breatheDot.style.animationPlayState = "paused";
+        animateRadius(90, 8, 600);
         breatheText.textContent = "Готово. Вы молодец";
-
         tg?.HapticFeedback?.notificationOccurred("success");
         startBtn.textContent = "Завершено";
     }
 
-    function stopBreathing() {
-        clearTimeout(timer);
-        breatheDot.style.animationPlayState = "paused";
-        breatheText.textContent = "Нажмите «Начать»";
-        startBtn.disabled = false;
-        startBtn.style.opacity = "1";
-        startBtn.textContent = "Начать";
-    }
-
     startBtn.addEventListener("click", startBreathing);
+
+
+    //СОВЕТЫ
+    const helpCard = container.querySelector(".help-card");
+
+    const adviceOverlay = container.querySelector("#mindAdviceOverlay");
+    const adviceBack = container.querySelector("#mindAdviceBack");
+    const adviceLink = container.querySelector("#mindAdviceLink");
+
+    /* ---------- OPEN ADVICE ---------- */
+    helpCard.addEventListener("click", () => {
+        tg?.HapticFeedback?.impactOccurred("medium");
+        adviceOverlay.classList.add("visible");
+        document.body.classList.add("no-scroll");
+    });
+
+    /* ---------- CLOSE ADVICE ---------- */
+    adviceBack.addEventListener("click", () => {
+        tg?.HapticFeedback?.impactOccurred("light");
+        adviceOverlay.classList.remove("visible");
+        document.body.classList.remove("no-scroll");
+    });
+
+    adviceLink.addEventListener("click", () => {
+        tg?.HapticFeedback?.impactOccurred("soft");
+
+        tg?.openLink(
+            "https://profi.ru/repetitor/psihologia/",
+            { try_instant_view: false }
+        );
+    });
+
+
 
 
 }

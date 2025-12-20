@@ -315,6 +315,10 @@ export function renderMind(container) {
         );
     });
 
+// лёгкий haptic после появления экрана
+    setTimeout(() => {
+        tg?.HapticFeedback?.impactOccurred("light");
+    }, 450);
 
 
 

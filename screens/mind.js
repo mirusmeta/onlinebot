@@ -69,6 +69,31 @@ export function renderMind(container) {
 
     </section>
   `;
+    container.insertAdjacentHTML("beforeend", `
+      <div class="sos-overlay" id="sosOverlay">
+        <div class="sos-screen">
+    
+          <button class="sos-back" id="sosBack">‹</button>
+    
+          <div class="sos-breathe">
+            <div class="breathe-circle">
+              <div class="breathe-dot"></div>
+            </div>
+    
+            <div class="breathe-text">Нажмите «Начать»</div>
+    
+            <button class="breathe-start" id="breatheStart">Начать</button>
+    
+            <div class="breathe-caption">
+              На основе медицинских рекомендаций
+            </div>
+          </div>
+    
+        </div>
+      </div>
+    `);
+
+
     const tg = window.Telegram?.WebApp;
 
     const moodRow = container.querySelector("#moodRow");
@@ -110,5 +135,92 @@ export function renderMind(container) {
         saveBtn.textContent = "Настроение сохранено";
         saveBtn.disabled = true;
     });
+
+    const sosCard = container.querySelector(".sos-card");
+    const sosOverlay = container.querySelector("#sosOverlay");
+    const sosBack = container.querySelector("#sosBack");
+
+    const breatheText = container.querySelector(".breathe-text");
+    const breatheDot = container.querySelector(".breathe-dot");
+    const startBtn = container.querySelector("#breatheStart");
+
+    const TOTAL_CYCLES = 10;
+    let cycle = 0;
+    let timer = null;
+
+    /* ---------- OPEN / CLOSE ---------- */
+
+    sosCard.addEventListener("click", () => {
+        tg?.HapticFeedback?.impactOccurred("medium");
+        sosOverlay.classList.add("visible");
+        document.body.classList.add("no-scroll");
+    });
+
+    sosBack.addEventListener("click", () => {
+        stopBreathing();
+        sosOverlay.classList.remove("visible");
+        document.body.classList.remove("no-scroll");
+    });
+
+    /* ---------- BREATHING ---------- */
+
+    function startBreathing() {
+        cycle = 0;
+        startBtn.disabled = true;
+        startBtn.style.opacity = "0.4";
+
+        breatheDot.style.animationPlayState = "running";
+        runCycle();
+    }
+
+    function runCycle() {
+        if (cycle >= TOTAL_CYCLES) {
+            finishBreathing();
+            return;
+        }
+
+        cycle++;
+
+        // ВДОХ
+        breatheText.textContent = "Вдыхайте…";
+        tg?.HapticFeedback?.impactOccurred("light");
+
+        // ЗАДЕРЖКА
+        setTimeout(() => {
+            breatheText.textContent = "Задержите дыхание…";
+        }, 2500);
+
+        // ВЫДОХ
+        setTimeout(() => {
+            breatheText.textContent = "Выдыхайте…";
+            tg?.HapticFeedback?.impactOccurred("soft");
+        }, 3500);
+
+        // Следующий цикл (7 секунд)
+        timer = setTimeout(runCycle, 7000);
+    }
+
+
+    function finishBreathing() {
+        clearTimeout(timer);
+
+        breatheDot.style.animationPlayState = "paused";
+        breatheText.textContent = "Готово. Вы молодец";
+
+        tg?.HapticFeedback?.notificationOccurred("success");
+        startBtn.textContent = "Завершено";
+    }
+
+    function stopBreathing() {
+        clearTimeout(timer);
+        breatheDot.style.animationPlayState = "paused";
+        breatheText.textContent = "Нажмите «Начать»";
+        startBtn.disabled = false;
+        startBtn.style.opacity = "1";
+        startBtn.textContent = "Начать";
+    }
+
+    startBtn.addEventListener("click", startBreathing);
+
 
 }

@@ -243,3 +243,141 @@
     align-items: center;
     justify-content: center;
 }
+
+.sos-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 999;
+    background-image: url("../images/clouds.png");
+    backdrop-filter: blur(0px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 260ms ease, backdrop-filter 260ms ease;
+}
+
+.sos-overlay.visible {
+    opacity: 1;
+    pointer-events: auto;
+    backdrop-filter: blur(18px);
+}
+
+/* ---------- SCREEN ---------- */
+
+.sos-screen {
+    position: absolute;
+    inset: 0;
+    background-image: url("../icons/clouds.png");
+    border-radius: 28px 28px 0 0;
+    transform: translateY(100%);
+    transition: transform 360ms cubic-bezier(.2,.8,.2,1);
+}
+
+.sos-overlay.visible .sos-screen {
+    transform: translateY(0);
+}
+
+/* ---------- BACK ---------- */
+
+.sos-back {
+    position: absolute;
+    top: 30px;
+    left: 24px;
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    border: none;
+    font-size: 60px;
+    align-content: center;
+    justify-content: center;
+    text-align: center;
+    color: rgba(0,0,0,0.30);
+    background: rgba(255,255,255,0.01);
+}
+
+/* ---------- BREATHE ---------- */
+
+.sos-breathe {
+    height: 100%;
+    padding: 80px 20px 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* Большой круг — статичный */
+
+.breathe-circle {
+    width: 240px;
+    height: 240px;
+    border-radius: 50%;
+    background: rgba(255,255,255);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Маленький — дышит */
+
+.breathe-dot {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #685443;
+
+    animation: breatheDot 7s cubic-bezier(.4,0,.2,1) infinite;
+    animation-play-state: paused;
+    transform-origin: center;
+}
+
+
+@keyframes breatheDot {
+
+    /* Старт — спокойствие */
+    0% {
+        transform: scale(1);
+        opacity: 0.6;
+    }
+
+    /* ВДОХ — почти до краёв */
+    35% {
+        transform: scale(14);
+        opacity: 1;
+    }
+
+    /* ПАУЗА НА ПИКЕ */
+    50% {
+        transform: scale(14);
+        opacity: 1;
+    }
+
+    /* ВЫДОХ — плавное возвращение */
+    100% {
+        transform: scale(1);
+        opacity: 0.6;
+    }
+}
+
+
+.breathe-text {
+    font-size: 24px;
+    margin-bottom: 120px;
+    color: #685443;
+}
+
+.breathe-start {
+    width: 50%;
+    height: 70px;
+    border-radius: 18px;
+    border: none;
+    background: rgba(0,0,0,0.22);
+    color: #FFFFFF;
+    font-size: 19px;
+    font-weight: 600;
+}
+
+.breathe-caption {
+    font-size: 13px;
+    opacity: 0.5;
+    color: rgba(0,0,0,0.5);
+}

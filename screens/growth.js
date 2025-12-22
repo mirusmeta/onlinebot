@@ -1,199 +1,250 @@
 // screens/growth.js
-// Block 3 — Development (Social wellbeing)
-
-const STORAGE_KEY = "growth_state_v2";
-
-const DEFAULT_DATA = {
-  mode: "idle",          // idle | focus | break
-  focusDuration: 25,     // minutes
-  timeLeft: 25 * 60,     // seconds
-  testResult: null,
-  completedSessions: 0
-};
-
-let timerInterval = null;
-
-/* ================= utils ================= */
-
-function loadData() {
-  return { ...DEFAULT_DATA, ...JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}") };
-}
-
-function saveData(data) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-}
-
-function formatTime(sec) {
-  const m = Math.floor(sec / 60).toString().padStart(2, "0");
-  const s = (sec % 60).toString().padStart(2, "0");
-  return `${m}:${s}`;
-}
-
-/* ================= render ================= */
-
 export function renderGrowth(container) {
-  const data = loadData();
+  const tg = window.Telegram?.WebApp;
 
-  container.innerHTML = `
-    <section class="growth-screen">
+  /* =========================
+     DATA
+  ========================= */
 
-      <!-- Pomodoro -->
-      <div class="metric-card">
-        <div class="metric-header">
-          <span>⏱ Фокус (Pomodoro)</span>
-          <span class="pomodoro-mode">
-            ${data.mode === "focus" ? "Фокус" : data.mode === "break" ? "Перерыв" : ""}
-          </span>
-        </div>
-
-        <div class="pomodoro-time">${formatTime(data.timeLeft)}</div>
-
-        <div class="pomodoro-presets">
-          ${[25, 40, 60].map(m => `
-            <button
-              class="preset-btn ${data.focusDuration === m ? "active" : ""}"
-              data-preset="${m}"
-              ${data.mode !== "idle" ? "disabled" : ""}
-            >
-              ${m} мин
-            </button>
-          `).join("")}
-        </div>
-
-        <button class="pomodoro-btn" data-action="toggle">
-          ${data.mode === "idle" ? "Начать" : "Стоп"}
-        </button>
-      </div>
-
-      <!-- Self knowledge -->
-      <div class="metric-card">
-        <div class="metric-header">
-          <span>🧩 Самопознание</span>
-        </div>
-
-        <p class="growth-text">Что тебе сейчас ближе?</p>
-
-        <div class="test-options">
-          <button data-test="logic">Аналитика</button>
-          <button data-test="people">Общение с людьми</button>
-        </div>
-
-        ${
-      data.testResult
-          ? `<div class="test-result">Твоя сильная сторона: <b>${data.testResult}</b></div>`
-          : ""
-  }
-      </div>
-
-      <!-- Soft skills -->
-      <div class="metric-card">
-        <div class="metric-header">
-          <span>🤝 Софт-скиллы</span>
-        </div>
-
-        <div class="soft-list">
-          <div class="soft-item">💬 Слушай собеседника, не перебивая</div>
-          <div class="soft-item">🎤 Говори уверенно, но спокойно</div>
-          <div class="soft-item">👥 В команде важна поддержка</div>
-        </div>
-      </div>
-
-    </section>
-  `;
-
-  bindEvents(container);
-}
-
-/* ================= events ================= */
-
-function bindEvents(container) {
-  const data = loadData();
-
-  // presets
-  container.querySelectorAll('[data-preset]').forEach(btn => {
-    btn.onclick = () => {
-      const minutes = Number(btn.dataset.preset);
-      data.focusDuration = minutes;
-      data.timeLeft = minutes * 60;
-      saveData(data);
-      renderGrowth(container);
-    };
-  });
-
-  // start / stop
-  container.querySelector('[data-action="toggle"]').onclick = () => {
-    if (data.mode === "idle") {
-      startFocus(container, data);
-    } else {
-      resetTimer(data);
-      renderGrowth(container);
+  const RECOMMENDATIONS = {
+    speech: {
+      title: "Как обрести уверенность на публичных выступлениях?",
+      author: "Ответ от Люка Скайвокера, пилота",
+      text: `Чтобы обрести уверенность на публичных выступлениях, важно
+            тщательно готовиться, начинать с малого, использовать дыхательные
+            техники для успокоения, визуализировать успех, работать над голосом
+            и телом (уверенная поза, медленная речь), а также помнить — ошибки
+            это часть роста и каждый опыт делает тебя сильнее.`
+    },
+    planning: {
+      title: "Как правильно планировать свой день?",
+      author: "Ответ от наставника",
+      text: `Начинай день с 2–3 приоритетных задач, используй тайм-блоки,
+            не забывай про перерывы и оставляй место для отдыха. План — это
+            инструмент, а не строгие рамки.`
     }
   };
 
-  // test
-  container.querySelectorAll('[data-test]').forEach(btn => {
-    btn.onclick = () => {
-      data.testResult =
-          btn.dataset.test === "logic"
-              ? "Аналитическое мышление"
-              : "Коммуникация с людьми";
-      saveData(data);
-      renderGrowth(container);
-    };
-  });
-}
+  /* =========================
+     POMODORO STATE
+  ========================= */
 
-/* ================= pomodoro logic ================= */
+  const WORK_TIME = 45 * 60;
+  const BREAK_TIME = 15 * 60;
+  const STORAGE_KEY = "growth_pomodoro_v1";
 
-function startFocus(container, data) {
-  data.mode = "focus";
-  data.timeLeft = data.focusDuration * 60;
-  saveData(data);
+  let timer = null;
+  let remaining = WORK_TIME;
+  let mode = "idle"; // idle | work | break | finished
+  let running = false;
 
-  renderGrowth(container);   // ← ВАЖНО
-  runTimer(container, data);
-}
+  /* =========================
+     RENDER MAIN
+  ========================= */
 
+  renderMain();
 
-function startBreak(container, data) {
-  data.mode = "break";
-  data.timeLeft = 5 * 60;
-  saveData(data);
+  function renderMain() {
+    container.innerHTML = `
+          <section class="growth-screen fade-in">
 
-  renderGrowth(container);   // ← тоже
-  runTimer(container, data);
-}
+            <div class="pomodoro-card">
+              <div class="pomodoro-bg" style="background-image:url('icons/growth-bg.png')"></div>
+              <div class="pomodoro-content">
+                <div class="pomodoro-time" id="pomodoroTime">45:00</div>
+                <div class="pomodoro-sub" id="pomodoroSub">Перерыв 15 минут</div>
+                <button class="pomodoro-start" id="pomodoroBtn">Запустить</button>
+              </div>
+            </div>
 
+            <h3 class="section-title">Рекомендации</h3>
 
-function runTimer(container, data) {
-  clearInterval(timerInterval);
+            <div class="rec-card" data-rec="speech">
+              <span>Как обрести уверенность на публичных выступлениях?</span>
+              <span class="rec-arrow">›</span>
+            </div>
 
-  timerInterval = setInterval(() => {
-    if (data.timeLeft > 0) {
-      data.timeLeft--;
-      saveData(data);
-      const timeEl = container.querySelector(".pomodoro-time");
-      if (timeEl) timeEl.textContent = formatTime(data.timeLeft);
-    } else {
-      clearInterval(timerInterval);
+            <div class="rec-card" data-rec="planning">
+              <span>Как правильно планировать свой день?</span>
+              <span class="rec-arrow">›</span>
+            </div>
 
-      if (data.mode === "focus") {
-        startBreak(container, data);
+            <div class="profile-test-card" id="profileTest">
+              <div>
+                <div class="pt-title">Профориентационный тест</div>
+                <div class="pt-sub">РАБОТА РОССИИ</div>
+              </div>
+              <div class="pt-action">›</div>
+            </div>
+
+          </section>
+        `;
+
+    restorePomodoro();
+    bindMainEvents();
+    tg?.HapticFeedback?.impactOccurred("soft");
+  }
+
+  /* =========================
+     EVENTS MAIN
+  ========================= */
+
+  function bindMainEvents() {
+    const pomodoroBtn = container.querySelector("#pomodoroBtn");
+    const recCards = container.querySelectorAll(".rec-card");
+    const profileTest = container.querySelector("#profileTest");
+
+    pomodoroBtn.addEventListener("click", togglePomodoro);
+
+    recCards.forEach(card => {
+      card.addEventListener("click", () => {
+        tg?.HapticFeedback?.impactOccurred("light");
+        openRecommendation(card.dataset.rec);
+      });
+    });
+
+    profileTest.addEventListener("click", () => {
+      tg?.HapticFeedback?.impactOccurred("medium");
+
+      if (tg?.openLink) {
+        tg.openLink(
+            "https://trudvsem.ru/proforientation/testing/profession-choice",
+            { try_instant_view: false }
+        );
       } else {
-        resetTimer(data);
-        data.completedSessions = (data.completedSessions || 0) + 1;
-        saveData(data);
-        alert("Цикл Pomodoro завершён 👏");
-        renderGrowth(container);
-
+        // Фоллбек если вдруг не Telegram
+        window.open(
+            "https://trudvsem.ru/proforientation/testing/profession-choice",
+            "_blank"
+        );
       }
-    }
-  }, 1000);
-}
+    });
 
-function resetTimer(data) {
-  clearInterval(timerInterval);
-  data.mode = "idle";
-  data.timeLeft = data.focusDuration * 60;
-  saveData(data);
+  }
+
+  /* =========================
+     POMODORO LOGIC
+  ========================= */
+
+  function togglePomodoro() {
+    tg?.HapticFeedback?.impactOccurred("light");
+
+    if (running) {
+      pausePomodoro();
+    } else {
+      startPomodoro();
+    }
+  }
+
+  function startPomodoro() {
+    running = true;
+    mode = mode === "idle" ? "work" : mode;
+
+    timer = setInterval(() => {
+      remaining--;
+      updatePomodoroUI();
+
+      if (remaining <= 0) {
+        nextPomodoroStage();
+      }
+    }, 1000);
+
+    updatePomodoroUI();
+    savePomodoro();
+  }
+
+  function pausePomodoro() {
+    running = false;
+    clearInterval(timer);
+    updatePomodoroUI();
+    savePomodoro();
+  }
+
+  function nextPomodoroStage() {
+    clearInterval(timer);
+
+    if (mode === "work") {
+      mode = "break";
+      remaining = BREAK_TIME;
+      tg?.HapticFeedback?.impactOccurred("medium");
+      startPomodoro();
+    } else {
+      mode = "finished";
+      running = false;
+      tg?.HapticFeedback?.notificationOccurred("success");
+    }
+
+    savePomodoro();
+  }
+
+  function updatePomodoroUI() {
+    const timeEl = container.querySelector("#pomodoroTime");
+    const subEl = container.querySelector("#pomodoroSub");
+    const btn = container.querySelector("#pomodoroBtn");
+
+    if (!timeEl) return;
+
+    timeEl.textContent = formatTime(remaining);
+
+    if (mode === "work") subEl.textContent = "Работа";
+    if (mode === "break") subEl.textContent = "Перерыв";
+    if (mode === "finished") subEl.textContent = "Готово";
+
+    btn.textContent = running ? "Пауза" : "Запустить";
+  }
+
+  function formatTime(sec) {
+    const m = String(Math.floor(sec / 60)).padStart(2, "0");
+    const s = String(sec % 60).padStart(2, "0");
+    return `${m}:${s}`;
+  }
+
+  function savePomodoro() {
+    localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify({ remaining, mode, running })
+    );
+  }
+
+  function restorePomodoro() {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return;
+
+    const data = JSON.parse(raw);
+    remaining = data.remaining ?? WORK_TIME;
+    mode = data.mode ?? "idle";
+    running = false;
+
+    updatePomodoroUI();
+  }
+
+  /* =========================
+     RECOMMENDATION SCREEN
+  ========================= */
+
+  function openRecommendation(key) {
+    const rec = RECOMMENDATIONS[key];
+
+    container.innerHTML = `
+          <section class="rec-screen slide-in">
+
+            <button class="rec-back">‹</button>
+
+            <h1>${rec.title}</h1>
+
+            <div class="rec-card-full">
+              <div class="rec-author">${rec.author}</div>
+              <div class="rec-text">${rec.text}</div>
+            </div>
+
+          </section>
+        `;
+
+    tg?.HapticFeedback?.impactOccurred("soft");
+
+    container.querySelector(".rec-back").addEventListener("click", () => {
+      tg?.HapticFeedback?.impactOccurred("light");
+      renderMain();
+    });
+  }
 }

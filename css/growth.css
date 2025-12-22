@@ -1,0 +1,295 @@
+/* screens/growth.css */
+
+.growth-screen {
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    color: #fff;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+
+/* Pomodoro card */
+.pomodoro-card {
+    position: relative;
+    border-radius: 18px;
+    overflow: hidden;
+    min-height: 220px;
+    background: #111;
+    box-shadow: 0 12px 28px rgba(0,0,0,0.6);
+}
+
+/* background image layer */
+.pomodoro-bg {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    filter: saturate(0.9) contrast(0.9) brightness(0.75);
+}
+
+/* content layer */
+.pomodoro-content {
+    position: relative;
+    z-index: 2;
+    padding: 28px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+/* small icon above time (use css mask or image) */
+.pomodoro-icon {
+    width: 40px;
+    height: 40px;
+    background: none;
+    margin-bottom: 6px;
+    background-image: url('icons/tomato.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 34px 34px;
+    filter: drop-shadow(0 2px 6px rgba(0,0,0,0.6));
+}
+
+/* time big */
+.pomodoro-time {
+    font-size: 56px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-align: center;
+    text-shadow: 0 8px 28px rgba(0,0,0,0.6);
+}
+
+/* sub text */
+.pomodoro-sub {
+    font-size: 18px;
+    opacity: 0.65;
+    margin-top: -6px;
+}
+
+/* start button */
+.pomodoro-start {
+    margin-top: 12px;
+    width: 62%;
+    height: 48px;
+    border-radius: 14px;
+    border: none;
+    background: rgba(255,255,255,0.12);
+    color: #fff;
+    font-weight: 700;
+    font-size: 18px;
+    backdrop-filter: blur(6px);
+    cursor: pointer;
+    transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease;
+}
+
+.pomodoro-start.running {
+    background: linear-gradient(180deg, rgba(37,99,235,0.95), rgba(29,78,216,0.95));
+    box-shadow: 0 10px 30px rgba(37,99,235,0.18);
+}
+
+/* Section title */
+.section-title {
+    font-size: 20px;
+    font-weight: 700;
+    margin-top: 6px;
+    margin-bottom: 6px;
+}
+
+/* Recommendations */
+.recommendations {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.rec-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(255,255,255,0.04);
+    border-radius: 14px;
+    padding: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 140ms ease, background 140ms ease;
+}
+
+.rec-card:active {
+    transform: scale(0.995);
+}
+
+.rec-text {
+    color: #fff;
+    opacity: 0.95;
+    font-size: 16px;
+    line-height: 1.2;
+}
+
+.rec-arrow {
+    font-size: 26px;
+    opacity: 0.6;
+}
+
+/* rec controls row */
+.rec-controls {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 6px;
+}
+
+.rec-refresh {
+    background: rgba(255,255,255,0.03);
+    border: none;
+    color: rgba(255,255,255,0.6);
+    padding: 10px 18px;
+    border-radius: 14px;
+    cursor: pointer;
+    font-weight: 700;
+}
+
+/* Profile test card */
+.profile-test-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(0,0,0,0.45);
+    border-radius: 16px;
+    padding: 14px 18px;
+    gap: 12px;
+    cursor: pointer;
+    transition: transform 140ms ease, box-shadow 140ms ease;
+}
+
+.profile-test-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 14px 34px rgba(0,0,0,0.3);
+}
+
+.pt-title {
+    font-weight: 800;
+    font-size: 16px;
+}
+
+.pt-sub {
+    color: #1ea7ff;
+    font-weight: 900;
+    margin-top: 6px;
+}
+
+/* action chevron */
+.pt-action {
+    width: 56px;
+    height: 56px;
+    background: #0ea5ff;
+    border-radius: 12px;
+    color: #fff;
+    font-size: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+}
+
+/* Responsive tweaks */
+@media (max-width: 420px) {
+    .pomodoro-time {
+        font-size: 44px;
+    }
+    .pomodoro-start {
+        width: 72%;
+    }
+    .onboard-inline-svg, .profile-test-card { font-size: 14px; }
+}
+/* ---------- ANIMATIONS ---------- */
+.fade-in {
+    animation: fadeInUp 420ms ease;
+}
+
+.slide-in {
+    animation: slideIn 360ms cubic-bezier(.2,.8,.2,1);
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(14px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+/* ---------- RECOMMENDATION LIST ---------- */
+.rec-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 18px;
+    border-radius: 18px;
+    background: rgba(255,255,255,0.06);
+
+    font-size: 17px;
+    font-weight: 600;
+
+    cursor: pointer;
+    transition: transform 160ms ease;
+}
+
+.rec-card:active {
+    transform: scale(0.97);
+}
+
+.rec-arrow {
+    font-size: 22px;
+    opacity: 0.5;
+}
+
+/* ---------- FULL RECOMMENDATION ---------- */
+.rec-screen {
+    padding: 24px 18px;
+    color: #fff;
+}
+
+.rec-back {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 34px;
+    margin-bottom: 12px;
+}
+
+.rec-screen h1 {
+    font-size: 28px;
+    line-height: 1.1;
+    margin-bottom: 18px;
+}
+
+.rec-card-full {
+    background: rgba(255,255,255,0.08);
+    border-radius: 22px;
+    padding: 20px;
+}
+
+.rec-author {
+    font-size: 14px;
+    opacity: 0.6;
+    margin-bottom: 12px;
+}
+
+.rec-text {
+    font-size: 17px;
+    line-height: 1.45;
+}

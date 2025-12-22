@@ -1,185 +1,122 @@
+/* css/body.css для совместимости с screens/body.js */
+
+.body-root {
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    background: transparent;
+}
+
+/* advice banner */
 .advice-card {
-    position: relative;
-    width: 100%;
-    height: 100px;
-    background-image: url('../icons/leaf_back.png');
+    height: 110px;
+    border-radius: 22px;
+    background-image: url("../icons/leaf_back.png");
     background-size: cover;
     background-position: center;
-    border-radius: 24px;
+    position: relative;
     overflow: hidden;
-    margin-top: 20px;
-    padding: 20px;
-    box-sizing: border-box;
-    color: white;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between; /* Распределяет пространство между header и bottom */
-}
-
-.advice-header {
-    text-align: center;
-    margin-top: -5px;
-
-}
-
-.advice-title {
-    margin: 0;
-    font-size: 28px;
-    font-weight: bold;
-}
-
-.advice-bottom-image {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: auto; /* Прижимает к низу */
-}
-
-.bottom-img {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 40px;
-    height: 40px;
-    border-radius: 12px;
-    background-image: url("/icons/finger.svg");
-    background-repeat: no-repeat;
-    background-position: bottom;
-    background-size: 28px 28px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-/* Стили для трекер-карточек */
-.horizontal-cards {
-    display: flex;
-    gap: 15px;
-    margin-top: 20px;
-    width: 100%;
-}
-
-.tracker-card {
-    flex: 1;
-    height: 300px;
-    border-radius: 24px;
-    overflow: hidden;
-    position: relative;
-    box-sizing: border-box;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    color: white;
-    background: #323232;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-}
-
-/* Карточка воды */
-.water-card {
-    /* Фон будет установлен через .card-progress-bg */
-}
-
-/* Карточка сна */
-.sleep-card {
-    /* Фон будет установлен через .card-progress-bg */
-}
-
-/* Заголовок по центру */
-.card-header {
-    text-align: center;
-    margin-bottom: 10px;
-    z-index: 2;
-    position: relative;
-}
-
-.card-title {
-    margin: 0;
-    font-size: 32px;
-    font-weight: bold;
-}
-
-.card-content {
-    margin-top: auto;
-    z-index: 2;
-    position: relative;
-}
-
-.card-main-value {
-    font-size: 28px;
-    font-weight: bold;
-    margin-bottom: 15px;
-    text-align: center;
-    line-height: 1.2;
-}
-
-.card-buttons {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.action-text {
-    font-size: 18px;
-    font-weight: 500;
-    min-width: 80px;
-    text-align: center;
-}
-
-.minus-btn, .plus-btn {
-    width: 42px;
-    height: 42px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    box-shadow: 0 10px 26px rgba(0,0,0,0.36);
     cursor: pointer;
 }
-
-.minus-btn img, .plus-btn img {
-    width: 26px;
-    height: 26px;
-    filter: brightness(0) invert(1);
-}
-
-/* Стили для прогресс-бара как фона */
-.card-progress-bg {
+.advice-card::after{
+    content: "Полезные советы";
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 1;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: 800;
+    color: #fff;
+    text-shadow: 0 6px 18px rgba(0,0,0,0.5);
 }
 
+/* layout */
+.horizontal-cards { display: flex; gap: 14px; }
+
+/* tracker card */
+.tracker-card {
+    flex: 1;
+    min-height: 260px;
+    border-radius: 20px;
+    background: #2f2f2f;
+    padding: 16px;
+    position: relative;
+    overflow: hidden;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.card-header { z-index: 3; position: relative; text-align: center; }
+.card-title { margin: 0; font-size: 26px; font-weight: 700; }
+
+.card-content { z-index: 3; position: relative; display:flex; flex-direction:column; align-items:center; gap:12px; }
+
+.card-main-value { font-size: 26px; font-weight: 800; }
+
+.card-buttons { display:flex; align-items:center; gap:14px; }
+
+.btn {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255,255,255,0.08);
+    color: #fff;
+    font-size: 24px;
+    cursor: pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+.btn:active { transform: scale(0.96); }
+
+/* progress fill must not block clicks */
+.card-progress-bg { position:absolute; inset:0; z-index:1; }
 .card-progress-fill {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    z-index: 1;
-    transition: height 0.5s ease;
+    position:absolute;
+    left:0; right:0; bottom:0;
+    height:0%;
+    z-index:1;
+    transition: height 420ms cubic-bezier(.2,.8,.2,1);
+    pointer-events: none; /* ВАЖНО: чтобы кнопки кликабельны были */
 }
 
-/* Конкретные цвета для карточек */
-.water-card .card-progress-bg {
-    background-image: url('../icons/water-bg.png');
-    background-size: cover;
-    background-position: center;
-    opacity: 0.3;
-}
+/* distinct colors */
+.water-card .card-progress-fill { background: #0082C3; opacity:0.95; }
+.sleep-card .card-progress-fill { background: linear-gradient(180deg,#0f2b45,#0b1a2f); opacity:0.95; }
 
-.water-card .card-progress-fill {
-    background: #0082C3;
+/* steps */
+.steps-wrap { margin-top: 8px; }
+.steps-card {
+    height: 92px;
+    border-radius: 16px;
+    background: #2f8f62;
+    padding: 12px 16px;
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+    box-shadow: 0 8px 22px rgba(0,0,0,0.35);
+    cursor:pointer;
 }
+.steps-title { font-weight:700; }
+.steps-value { font-size:22px; font-weight:800; text-align:center; color:#fff; }
 
-.sleep-card .card-progress-bg {
-    background-image: url('../icons/night_back_darker.png');
-    background-size: cover;
-    background-position: center;
-}
+.steps-progress { width:100%; height:8px; background: rgba(255,255,255,0.12); border-radius:6px; overflow:hidden; }
+.steps-fill { width:0%; height:100%; background: linear-gradient(90deg,#00FFA6,#00c78a); transition: width 520ms cubic-bezier(.2,.8,.2,1); }
 
-.sleep-card .card-progress-fill {
-    background-image: url('../icons/night_back.png');
-    background-size: cover;
-    background-position: center;
+/* goal row */
+.goal-row { display:flex; gap:10px; margin-top:6px; }
+.goal-row input { flex:1; height:44px; border-radius:12px; border:none; padding:0 12px; background:#222; color:#fff; }
+.goal-row button { width:120px; border-radius:12px; border:none; background:#1f8cff; color:#fff; }
+
+/* responsive */
+@media (max-width:420px) {
+    .card-title { font-size:22px; }
+    .card-main-value { font-size:20px; }
+    .btn { width:44px; height:44px; font-size:20px; }
 }

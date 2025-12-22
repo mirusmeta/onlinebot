@@ -1,17 +1,53 @@
 // screens/profile.js
 // Экран "Профиль" — данные из Telegram + челлендж дня
+import {createClient} from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm' // Импортируем Supabase
 
-export function renderProfile(container) {
-  const tg = window.Telegram?.WebApp;
-  const user = tg?.initDataUnsafe?.user;
+export async function renderProfile(container) {
+    const tg = window.Telegram?.WebApp;
+    const user = tg?.initDataUnsafe?.user;
 
-  const userName = user
-      ? `${user.first_name ?? ""} ${user.last_name ?? ""}`.trim()
-      : "Имя пользователя";
+    // Используем ID пользователя из Telegram как уникальный ключ
+    const userId = user?.id?.toString() || 'default_user';
 
-  const userPhoto = user?.photo_url ?? "../icons/avatar-placeholder.png";
+    const userName = user
+        ? `${user.first_name ?? ""} ${user.last_name ?? ""}`.trim()
+        : "Имя пользователя";
 
-  container.innerHTML = `
+    const userPhoto = user?.photo_url ?? "../icons/avatar-placeholder.png";
+
+    // 1. Инициализация клиента Supabase
+    const SUPABASE_URL = "https://sksjfwnaomhhjtmlwhue.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_4cKEpZw4LK4BCGMBCNhujg_Suize4Bc";
+
+    const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    // Переменные для хранения данных, загруженных из БД
+    let userPoints = 0;
+    let userStreak = 1;
+    let isChallengeDone = false;
+
+    // 2. Пробуем загрузить данные пользователя из базы
+    try {
+        const {data, error} = await supabase
+            .from('users')
+            .select('points, streak, isChallengeComplited')
+            .eq('id', userId)
+            .single(); // Ожидаем одну запись
+
+        if (error && error.code !== 'PGRST116') { // PGRST116 — это ошибка "не найдено", она нормальна для нового пользователя
+            console.error('Ошибка при загрузке пользователя:', error);
+        } else if (data) {
+            // Если пользователь найден, используем данные из БД
+            userPoints = data.points || 0;
+            userStreak = data.streak || 1;
+            isChallengeDone = data.isChallengeComplited || false;
+        }
+    } catch (err) {
+        console.error('Неожиданная ошибка при загрузке:', err);
+    }
+
+    // 3. Отображаем интерфейс, используя загруженные или дефолтные данные
+    container.innerHTML = `
       <section class="profile-screen">
 
         <!-- AVATAR -->
@@ -29,12 +65,12 @@ export function renderProfile(container) {
 
           <div class="profile-stats">
             <div class="profile-stat">
-              <div class="profile-stat-value">0</div>
+              <div class="profile-stat-value">${userPoints}</div> <!-- Баллы из БД -->
               <div class="profile-stat-label">Баллы</div>
             </div>
 
             <div class="profile-stat profile-stat-accent">
-              <div class="profile-stat-value">1</div>
+              <div class="profile-stat-value">${userStreak}</div> <!-- Дней подряд из БД -->
               <div class="profile-stat-label">Дней подряд</div>
             </div>
           </div>
@@ -44,7 +80,7 @@ export function renderProfile(container) {
         <div class="profile-block">
           <h3 class="profile-block-title">Челлендж дня</h3>
 
-          <div class="profile-challenge">
+          <div class="profile-challenge ${isChallengeDone ? 'done' : ''}"> <!-- Класс из БД -->
             <div class="profile-challenge-text">
               Самостоятельно выбери задачу, и выполни ее
             </div>
@@ -64,37 +100,55 @@ export function renderProfile(container) {
       </section>
     `;
 
-  /* ---------- CHALLENGE LOGIC ---------- */
+    /* ---------- CHALLENGE LOGIC ---------- */
+    const challengeCard = container.querySelector(".profile-challenge");
+    const pointsValueEl = container.querySelector(".profile-stat-value"); // Первый элемент с баллами
+    const streakValueEl = container.querySelector(".profile-stat-accent .profile-stat-value"); // Элемент с серией
 
-  const challengeCard = container.querySelector(".profile-challenge");
+    challengeCard.addEventListener("click", async () => { // Делаем обработчик асинхронным
+        if (isChallengeDone) return;
+        try {
+            // Логика обновления данных (баллы +10, серия +1, челлендж выполнен)
+            const newPoints = userPoints + 10;
+            const newStreak = userStreak + 1;
 
-  const CHALLENGE_KEY = "profile_daily_challenge_done";
-  const today = new Date().toISOString().slice(0, 10);
+            // 4. Отправляем обновленные данные в Supabase (UPSERT - обновить или создать)
+            const {data, error} = await supabase
+                .from('users')
+                .upsert({
+                    id: userId,
+                    points: newPoints,
+                    streak: newStreak,
+                    isChallengeComplited: true
+                })
+                .select(); // Возвращаем обновленные данные (опционально)
 
-  const savedDate = localStorage.getItem(CHALLENGE_KEY);
-  let challengeDone = savedDate === today;
+            if (error) {
+                throw error;
+            }
 
-  // если уже выполнено сегодня — сразу красим
-  if (challengeDone) {
-    challengeCard.classList.add("done");
-  }
+            // 5. Если запрос к БД успешен, обновляем локальные переменные и интерфейс
+            isChallengeDone = true;
+            userPoints = newPoints;
+            userStreak = newStreak;
 
-  challengeCard.addEventListener("click", () => {
-    if (challengeDone) return;
+            // Обновляем числа на экране
+            pointsValueEl.textContent = userPoints;
+            streakValueEl.textContent = userStreak;
+            challengeCard.classList.add("done");
 
-    challengeDone = true;
+            // Тактильный отклик
+            tg?.HapticFeedback?.notificationOccurred("success");
 
-    // сохраняем выполнение на сегодня
-    localStorage.setItem(CHALLENGE_KEY, today);
+        } catch (error) {
+            console.error('Ошибка при обновлении челленджа в БД:', error);
+            // Здесь можно показать пользователю всплывающее сообщение об ошибке
+            tg?.HapticFeedback?.notificationOccurred("error");
+        }
+    });
 
-    // haptic — успех
-    tg?.HapticFeedback?.notificationOccurred("success");
-
-    // визуал
-    challengeCard.classList.add("done");
-  });
-
-  setTimeout(() => {
-    tg?.HapticFeedback?.impactOccurred("light");
-  }, 450);
+    // Легкая вибрация для интерактивности
+    setTimeout(() => {
+        tg?.HapticFeedback?.impactOccurred("light");
+    }, 450);
 }
